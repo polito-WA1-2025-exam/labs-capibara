@@ -2,7 +2,7 @@
 
 ## Members
 - s340336 Magenta Alice Paola
-- s123456 LASTNAME FIRSTNAME
+- s344839 Ortega Caicedo David Fernando
 - s123456 LASTNAME FIRSTNAME
 
 # Exercise "NAME OF EXERCISE"
