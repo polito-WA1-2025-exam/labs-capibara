@@ -1,4 +1,4 @@
-# Group "GROUP NAME"
+# Group "Capibara"
 
 ## Members
 - s340336 Magenta Alice Paola
@@ -6,7 +6,7 @@
 - s347929 Borlina Edoardo
 - s123456 LASTNAME FIRSTNAME
 
-# Exercise "NAME OF EXERCISE"
+# Exercise "Poke"
 
 # Lab Journal
 
