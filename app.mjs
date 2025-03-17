@@ -1,12 +1,16 @@
 "use strict";
 
+
+
+import * as dbF from "./dbFunctions";
+
 const validSizes = ['R', 'M', 'L'];
 
 const validIngredients = ["avocado", "ananas", "cashew nuts", "kale", "mango", "peppers", "corn", 
     "wakame", "tomatoes", "carrots", "salad"];
 const validProteins = ['Tuna', 'Chicken', 'Salmon', 'Tofu']
 const validBases = ['Rice', 'Black rice', 'Salad']
-const bowl_sizes ={
+const bowl_sizes = {
     'R' : {
         'base_price' : 9
         , 'max_ingredients' : 4
@@ -78,6 +82,8 @@ function Bowl(size, base){
         }
 
     }
+
+    
 }
 
 
@@ -85,7 +91,6 @@ function Order(){
     this.bowls = [];
     this.discount = 0;
 }
-
 
 let a = new Bowl('R', 'Rice');
 
@@ -102,5 +107,16 @@ console.log("proteins: " + a.proteins);
 // Example of invalid ingredient
 a.addIngredient('banana');
 
+let i = dbF.getIngredients().then((result) => {console.log("Ingredients: ", result); return result;});
+let p = dbF.getProteins().then((result) => {console.log("Proteins: ", result); return result;});
 
-
+let b = dbF.getBowls().then((result) => {
+    // for each key inside the result object print all values
+    console.log("Bowls: ");
+    for (const key in result) {
+        console.log(key + ":");
+        for (const innerKey in result[key]) {
+            console.log("  " + innerKey + ": " + result[key][innerKey]);
+        }
+    }
+});
