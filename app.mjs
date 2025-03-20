@@ -107,6 +107,7 @@ console.log("proteins: " + a.proteins);
 // Example of invalid ingredient
 a.addIngredient('banana');
 
+// note: i and p are promises
 let i = dbF.getIngredients().then((result) => {console.log("Ingredients: ", result); return result;});
 let p = dbF.getProteins().then((result) => {console.log("Proteins: ", result); return result;});
 

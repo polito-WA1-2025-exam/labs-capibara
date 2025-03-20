@@ -53,7 +53,8 @@ export function getProteins(){
 export function getBowls(){
     return new Promise( (resolve, reject) => {
         const sql = `SELECT * FROM BOWL B, HAS_INGREDIENTS H, INGREDIENT I
-                     WHERE B.Bowl_ID = H.Bowl_ID AND H.Ingredient = I.Name`;
+                     WHERE B.Bowl_ID = H.Bowl_ID AND H.Ingredient = I.Name
+                     ORDER BY B.Bowl_ID, I.Name`;
         db.all(sql, [], (err, rows) => {
             if(err)
                 reject(err);
