@@ -1,6 +1,7 @@
 "use strict";
 
 import sqlite3 from "sqlite3";
+import * as poke from "./poke.mjs"
 
 
 // open database connection
@@ -82,5 +83,31 @@ export function getBowls(){
             }
         });
     });
+}
+
+//Insert Bowl object to database if it doesn't exists already
+export function insertBowl(bowl){
+    let proteins = {};
+    let ingredients = {};
+    let price = bowl.price;
+
+    bowl.proteins.forEach((p) =>{
+        if(p in proteins){
+            proteins[p] += 1;
+        } else {
+            proteins[p] = 1;
+        }
+    });
+
+    bowl.ingredients.forEach((p) =>{
+        if(p in ingredients){
+            ingredients[p] += 1;
+        } else {
+            ingredients[p] = 1;
+        }
+    });
+
+
+
 }
 
