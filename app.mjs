@@ -13,6 +13,7 @@ a.addIngredient('avocado');
 a.addIngredient('ananas');
 a.addProtein('Tuna');
 a.addProtein('Chicken');
+a.addProtein('Chicken');
 
 console.log(a);
 console.log("ingredients: " + a.ingredients);
@@ -25,6 +26,8 @@ a.addIngredient('banana');
 let i = dbF.getIngredients().then((result) => {console.log("Ingredients: ", result); return result;});
 let p = dbF.getProteins().then((result) => {console.log("Proteins: ", result); return result;});
 
+dbF.insertBowl(a);
+
 let b = dbF.getBowls().then((result) => {
     // for each key inside the result object print all values
     console.log("Bowls: ");
@@ -35,3 +38,4 @@ let b = dbF.getBowls().then((result) => {
         }
     }
 });
+
