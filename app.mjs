@@ -11,6 +11,12 @@ let a = new poke.Bowl('R', 'Rice');
 // Example of ingredients and proteins insertion
 a.addIngredient('avocado');
 a.addIngredient('ananas');
+a.addIngredient('ananas');
+a.addIngredient('ananas');
+a.addIngredient('ananas');
+a.addIngredient('ananas');
+a.addIngredient('ananas');
+
 a.addProtein('Tuna');
 a.addProtein('Chicken');
 a.addProtein('Chicken');
