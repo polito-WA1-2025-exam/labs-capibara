@@ -1,0 +1,166 @@
+"use strict";
+
+import sqlite3 from "sqlite3";
+import * as poke from "./poke.mjs"
+
+
+// open database connection
+const db = new sqlite3.Database("poke.sqlite", (err) => {
+    if (err) 
+        throw err;
+    console.log("Connected to the poke database.");
+    }
+);
+
+// get ingredients from database
+export function getIngredients(){
+    return new Promise( (resolve, reject) => {
+        const sql = `SELECT * FROM ingredient
+                     WHERE Protein = 0`;
+        db.all(sql, [], (err, rows) => {
+            if(err)
+                reject(err);
+            else{
+                let result = [];
+                rows.forEach( (item) => {
+                    result.push(item.Name);
+                });
+                resolve(result);
+            }
+        });
+    });
+}
+
+// get proteins from database
+export function getProteins(){
+    return new Promise( (resolve, reject) => {
+        const sql = `SELECT * FROM ingredient
+                     WHERE Protein = 1`;
+        db.all(sql, [], (err, rows) => {
+            if(err)
+                reject(err);
+            else{
+                let result = [];
+                rows.forEach( (item) => {
+                    result.push(item.Name);
+                });
+                resolve(result);
+            }
+        });
+    });
+}
+
+// get all bowls with their ingredients from database
+export function getBowls(){
+    return new Promise( (resolve, reject) => {
+        const sql = `SELECT * FROM BOWL B, HAS_INGREDIENTS H, INGREDIENT I
+                     WHERE B.Bowl_ID = H.Bowl_ID AND H.Ingredient = I.Name
+                     ORDER BY B.Bowl_ID, I.Name`;
+        db.all(sql, [], (err, rows) => {
+            if(err)
+                reject(err);
+            else{
+                let result = {};
+                for(const item of rows){
+                    // check if the ingredient is already into result
+                    if(result[item.Bowl_ID] === undefined){
+                        result[item.Bowl_ID] = {
+                            price : item.Price,
+                            size : item.Size,
+                            ingredients : [],
+                            proteins : []
+                        };
+                    }
+                    // add the ingredient to the result vector
+                    if(item.Protein === 0){
+                        result[item.Bowl_ID].ingredients.push(item.Name);
+                    } else{
+                        result[item.Bowl_ID].proteins.push(item.Name);
+                    }
+                }
+
+                resolve(result);
+            }
+        });
+    });
+}
+
+// Insert Bowl object to database if it doesn't exist already
+export function insertBowl(bowl) {
+    return new Promise((resolve, reject) => {
+        let proteins = {};
+        let ingredients = {};
+        let description = "";
+
+        bowl.ingredients.forEach((p) => {
+            if (p in ingredients) {
+                ingredients[p] += 1;
+            } else {
+                ingredients[p] = 1;
+            }
+        });
+
+        bowl.proteins.forEach((p) => {
+            if (p in proteins) {
+                proteins[p] += 1;
+            } else {
+                proteins[p] = 1;
+            }
+        });
+
+        description = bowl.size + "-" + bowl.base + "-" + JSON.stringify(ingredients) + "-" + JSON.stringify(proteins);
+
+        // Check if the bowl already exists
+        const checkSql = `SELECT Bowl_ID FROM BOWL WHERE Description = ?`;
+        db.get(checkSql, [description], (err, row) => {
+            if (err) {
+                reject(err);
+            } else if (row) {
+                // Bowl already exists
+                resolve(row.Bowl_ID);
+            } else {
+                // Insert the new bowl
+                const insertBowlSql = `INSERT INTO BOWL (Size, Base, Price, Description) VALUES (?, ?, ?, ?)`;
+                db.run(insertBowlSql, [bowl.size, bowl.base, bowl.price, description], function (err) {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        const bowlId = this.lastID;
+
+                        // Insert ingredients and proteins into HAS_INGREDIENTS
+                        const insertIngredientSql = `INSERT INTO HAS_INGREDIENTS (Bowl_ID, Ingredient, Quantity) VALUES (?, ?, ?)`;
+
+                        const tasks = [];
+
+                        for (const [ingredient, quantity] of Object.entries(ingredients)) {
+                            tasks.push(
+                                new Promise((resolve, reject) => {
+                                    db.run(insertIngredientSql, [bowlId, ingredient, quantity], (err) => {
+                                        if (err) reject(err);
+                                        else resolve();
+                                    });
+                                })
+                            );
+                        }
+
+                        for (const [protein, quantity] of Object.entries(proteins)) {
+                            tasks.push(
+                                new Promise((resolve, reject) => {
+                                    db.run(insertIngredientSql, [bowlId, protein, quantity], (err) => {
+                                        if (err) reject(err);
+                                        else resolve();
+                                    });
+                                })
+                            );
+                        }
+
+                        Promise.all(tasks)
+                            .then(() => resolve(bowlId))
+                            .catch((err) => reject(err));
+                    }
+                });
+            }
+        });
+    });
+}
+
