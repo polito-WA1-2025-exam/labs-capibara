@@ -31,6 +31,25 @@ export function getIngredients(){
     });
 }
 
+// Get all orders from DB
+
+export function getOrders(){
+    return new Promise( (resolve, reject) => {
+        const sql = `SELECT * FROM order`;
+        db.all(sql, [], (err, rows) => {
+            if(err)
+                reject(err);
+            else{
+                let result = [];
+                rows.forEach( (item) => {
+                    result.push(item);
+                });
+                resolve(result);
+            }
+        });
+    });
+}
+
 // get proteins from database
 export function getProteins(){
     return new Promise( (resolve, reject) => {

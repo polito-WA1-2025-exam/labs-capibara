@@ -45,3 +45,5 @@ let b = dbF.getBowls().then((result) => {
     }
 });
 
+dbF.getOrders().then((result) => console.log(result));
+
