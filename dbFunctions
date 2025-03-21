@@ -42,9 +42,10 @@ export function getOrders(){
             else{
                 let result = [];
                 rows.forEach( (item) => {
-                    result.push(item.Order_Id+"-"+item.Price);
+                    result.push(item);
                 });
-                resolve(result);
+                let result2 = {"Orders" : result}
+                resolve(result2);
             }
         });
     });
@@ -127,7 +128,8 @@ export function insertBowl(bowl) {
             }
         });
 
-        description = bowl.size + "-" + bowl.base + "-" + JSON.stringify(ingredients) + "-" + JSON.stringify(proteins);
+        //description = bowl.size + "-" + bowl.base + "-" + JSON.stringify(ingredients) + "-" + JSON.stringify(proteins);
+        description = JSON.stringify(bowl);
 
         // Check if the bowl already exists
         const checkSql = `SELECT Bowl_ID FROM BOWL WHERE Description = ?`;
