@@ -11,15 +11,27 @@ let a = new poke.Bowl('R', 'Rice');
 // Example of ingredients and proteins insertion
 a.addIngredient('avocado');
 a.addIngredient('ananas');
-
+a.addIngredient('ananas');
+a.addIngredient('avocado');
+a.addIngredient('ananas');
+a.addIngredient('avocado');
+a.addIngredient('avocado');
+a.addIngredient('ananas');
+a.addIngredient('ananas');
+a.addIngredient('avocado');
+a.addIngredient('ananas');
+a.addIngredient('avocado');
 
 a.addProtein('Tuna');
 a.addProtein('Chicken');
 a.addProtein('Chicken');
 
+
 console.log(a);
 console.log("ingredients: " + a.ingredients);
 console.log("proteins: " + a.proteins);
+
+a.updatePrice();
 
 // Example of invalid ingredient
 a.addIngredient('banana');

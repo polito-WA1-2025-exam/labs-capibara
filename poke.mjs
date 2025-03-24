@@ -1,9 +1,9 @@
 export const validSizes = ['R', 'M', 'L'];
 
-export const validIngredients = ["avocado", "ananas", "cashew nuts", "kale", "mango", "peppers", "corn", 
-    "wakame", "tomatoes", "carrots", "salad"];
+export const validIngredients = ["Avocado", "Ananas", "Cashew_nuts", "Kale", "Mango", "Peppers", "Corn", 
+    "Wakame", "Tomatoes", "Carrots", "Salad"];
 export const validProteins = ['Tuna', 'Chicken', 'Salmon', 'Tofu']
-export const validBases = ['Rice', 'Black rice', 'Salad']
+export const validBases = ['Rice', 'Black_rice', 'Salad']
 export const bowl_sizes = {
     'R' : {
         'base_price' : 9
@@ -67,11 +67,11 @@ export function Bowl(size, base){
     }
 
     this.updatePrice = () => {
-        tot_ingredients = this.ingredients.length
-        max_ingredients = bowl_sizes[this.size].max_ingredients
+        let tot_ingredients = this.ingredients.length
+        let max_ingredients = bowl_sizes[this.size].max_ingredients
 
         if (tot_ingredients > max_ingredients) {
-            extra_ingredients = tot_ingredients - max_ingredients
+            let extra_ingredients = tot_ingredients - max_ingredients
             this.price = this.price * (1 + .2 * extra_ingredients)
         }
 
@@ -80,6 +80,9 @@ export function Bowl(size, base){
     
 }
 
+export function User(email){
+    this.email = email 
+}
 
 export function Order(){
     this.bowls = [];
