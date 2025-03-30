@@ -6,21 +6,21 @@ import * as dbF from "./dbFunctions";
 import * as poke from "./poke.mjs"
 
 
-let a = new poke.Bowl('R', 'Rice');
+let a = new poke.Bowl('L', 'Rice');
 
 // Example of ingredients and proteins insertion
-a.addIngredient('avocado');
-a.addIngredient('ananas');
-a.addIngredient('ananas');
-a.addIngredient('avocado');
-a.addIngredient('ananas');
-a.addIngredient('avocado');
-a.addIngredient('avocado');
-a.addIngredient('ananas');
-a.addIngredient('ananas');
-a.addIngredient('avocado');
-a.addIngredient('ananas');
-a.addIngredient('avocado');
+a.addIngredient('Avocado');
+a.addIngredient('Ananas');
+a.addIngredient('Ananas');
+a.addIngredient('Avocado');
+a.addIngredient('Ananas');
+a.addIngredient('Avocado');
+a.addIngredient('Avocado');
+a.addIngredient('Ananas');
+a.addIngredient('Ananas');
+a.addIngredient('Avocado');
+a.addIngredient('Ananas');
+a.addIngredient('Avocado');
 
 a.addProtein('Tuna');
 a.addProtein('Chicken');
@@ -42,11 +42,11 @@ let p = dbF.getProteins().then((result) => {console.log("Proteins: ", result); r
 
 dbF.insertBowl(a);
 
-let b = dbF.getBowls().then((result) => {
+dbF.getBowls().then((result) => {
     // for each key inside the result object print all values
     console.log("Bowls: ");
     for (const item of result) {
-        console.log(item);
+        console.log(JSON.stringify(item)+"\n");
     }
 });
 

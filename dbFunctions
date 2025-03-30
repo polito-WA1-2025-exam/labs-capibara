@@ -88,7 +88,7 @@ export function getBowls(){
     });
 }
 
-// Insert Bowl object to database if it doesn't exist already
+// Insert Bowl object to database if it doesn't already exists
 export function insertBowl(bowl) {
     return new Promise((resolve, reject) => {
         let proteins = {};

@@ -76,15 +76,31 @@ export function Bowl(size, base){
         }
 
     }
-
-    
 }
 
 export function User(email){
     this.email = email 
 }
 
-export function Order(){
+export function Order(user){
     this.bowls = [];
-    this.discount = 0;
+    this.user = user;
+    this.bowlsNum = 0;
+
+    this.addBowlToOrder = (bowl, quantity = 1) => {
+        // update the number of bowls in the order
+        this.bowlsNum += quantity;
+
+        // If the bowl is already in the order
+        this.bowls.forEach(b => {
+            if(JSON.stringify(bowl) == JSON.stringify(b.bowl)){
+                b.quantity += quantity;
+                return;
+            }
+        })
+        
+        // If the  desired bowl is not yet in the order
+        this.bowls.push({"bowl": bowl, "quantity": quantity})
+    }
+
 }
