@@ -48,4 +48,5 @@ let p = dbF.getProteins().then((result) => {console.log("Proteins: ", result); r
 
 // dbF.getBowlById(6).then(result => console.log(JSON.stringify(result)))
 // dbF.getOrderById(3).then(result => console.log(JSON.stringify(result)))
+// dbF.insertOrder(new poke.Order("sus"), 1000);
 
