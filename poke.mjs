@@ -78,8 +78,9 @@ export function Bowl(size, base){
     }
 }
 
-export function User(email){
-    this.email = email 
+export function User(username, email){
+    this.email = email;
+    this.username = username;
 }
 
 export function Order(user){
