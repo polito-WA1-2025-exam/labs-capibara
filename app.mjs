@@ -40,15 +40,12 @@ a.addIngredient('banana');
 let i = dbF.getIngredients().then((result) => {console.log("Ingredients: ", result); return result;});
 let p = dbF.getProteins().then((result) => {console.log("Proteins: ", result); return result;});
 
-dbF.insertBowl(a);
+// dbF.insertBowl(a);
 
-dbF.getBowls().then((result) => {
-    // for each key inside the result object print all values
-    console.log("Bowls: ");
-    for (const item of result) {
-        console.log(JSON.stringify(item)+"\n");
-    }
-});
+/** Some debug prints */
 
-dbF.getOrders().then((result) => console.log(result));
+// dbF.getOrders().then((result) => console.log(result));
+
+// dbF.getBowlById(6).then(result => console.log(JSON.stringify(result)))
+// dbF.getOrderById(3).then(result => console.log(JSON.stringify(result)))
 
