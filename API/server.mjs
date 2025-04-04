@@ -42,6 +42,22 @@ app.get('/orders', async (req, res) => {
       }
 
 }) ;
+
+app.get('/orders/:orderId', async (req, res) => {
+  const orderId = req.params.orderId
+  try {
+    const o = await apif.getOrder(orderId);
+    if(o.error) {
+      res.status(404).json(o);
+    } else {
+      res.json(o);
+    }
+  }
+  catch {
+    res.status(500).end();
+  }
+})
+
 let j = apif.getMainCollection()
 console.log(j)
 // Activate server
