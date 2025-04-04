@@ -68,9 +68,9 @@ export function getProteins(){
 /**
  * Inserts a new order into the database.
  * @param {Object} order - The order object to insert.
- * @param {number} order.userId - The ID of the user placing the order.
- * @param {number[]} order.bowlIds - An array of bowl IDs included in the order.
- * @param {number} order.totalPrice - The total price of the order.
+ * @param {number} order.user - The username of the user placing the order.
+ * @param {number[]} order.bowls - An array of bowls included in the order.
+ * @param {number} order.price - The total price of the order.
  * @returns {Promise<number>} A promise that resolves to the ID of the inserted order.
  */
 export function insertOrder(order, price) {
@@ -80,7 +80,42 @@ export function insertOrder(order, price) {
             if (err) {
                 reject(err);
             } else {
-                resolve();
+                // Retrieve the order number (order id)
+                const getOrdIdSql = `SELECT MAX(Order_Id) AS Order_Id FROM [order]`
+                db.get(getOrdIdSql, [], (err, row) => {
+                    if(err) 
+                        reject(err);
+                    else{
+                        const Order_Id = row.Order_Id;
+                        const descriptions = order.bowls.map((bowl) => JSON.stringify(bowl));
+                        // get all the Bowls ID from the order object 
+                        // and insert them int the ORDER_ELEMENT table
+                        const tasks = descriptions.map((description) => {
+                            return new Promise((resolve, reject) => {
+                                const getBowlIdSql = `SELECT Bowl_Id FROM BOWL WHERE Description = ?`;
+                                db.get(getBowlIdSql, [description], (err, row) => {
+                                    if (err) {
+                                        reject(err);
+                                    } else if (row) {
+                                        const insertOrderElementSql = `INSERT INTO ORDER_ELEMENT (Order_Id, Bowl_Id) VALUES (?, ?)`;
+                                        db.run(insertOrderElementSql, [Order_Id, row.Bowl_Id], (err) => {
+                                            if (err) reject(err);
+                                            else resolve();
+                                        });
+                                    } else {
+                                        reject(new Error("Bowl not found for description: " + description));
+                                    }
+                                });
+                            });
+                        });
+
+                        Promise.all(tasks)
+                            .then(() => resolve(Order_Id))
+                            .catch((err) => reject(err));
+
+                        resolve(row.Order_Id);
+                    }
+                })
             }
         });
     });
