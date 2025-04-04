@@ -80,44 +80,35 @@ export function insertOrder(order, price) {
             if (err) {
                 reject(err);
             } else {
-                // Retrieve the order number (order id)
-                const getOrdIdSql = `SELECT MAX(Order_Id) AS Order_Id FROM [order]`
-                db.get(getOrdIdSql, [], (err, row) => {
-                    if(err) 
-                        reject(err);
-                    else{
-                        const Order_Id = row.Order_Id;
-                        const descriptions = order.bowls.map((bowl) => JSON.stringify(bowl));
-                        // get all the Bowls ID from the order object 
-                        // and insert them int the ORDER_ELEMENT table
-                        const tasks = descriptions.map((description) => {
-                            return new Promise((resolve, reject) => {
-                                const getBowlIdSql = `SELECT Bowl_Id FROM BOWL WHERE Description = ?`;
-                                db.get(getBowlIdSql, [description], (err, row) => {
-                                    if (err) {
-                                        reject(err);
-                                    } else if (row) {
-                                        const insertOrderElementSql = `INSERT INTO ORDER_ELEMENT (Order_Id, Bowl_Id) VALUES (?, ?)`;
-                                        db.run(insertOrderElementSql, [Order_Id, row.Bowl_Id], (err) => {
-                                            if (err) reject(err);
-                                            else resolve();
-                                        });
-                                    } else {
-                                        reject(new Error("Bowl not found for description: " + description));
-                                    }
+                // Retrieve the order number (order id) using this.lastID
+                const Order_Id = this.lastID;
+
+                // get all the Bowls ID from the order object 
+                // and insert them into the ORDER_ELEMENT table
+                const tasks = order.bowls.map((orderEl) => {
+                    return new Promise((resolve, reject) => {
+                        const getBowlIdSql = `SELECT Bowl_Id FROM BOWL WHERE Description = ?`;
+                        db.get(getBowlIdSql, [JSON.stringify(orderEl.bowl)], (err, row) => {
+                            if (err) {
+                                reject(err);
+                            } else if (row) {
+                                const insertOrderElementSql = `INSERT INTO ORDER_ELEMENT (Order_Id, Bowl_Id, Quantity) VALUES (?, ?, ?)`;
+                                db.run(insertOrderElementSql, [Order_Id, row.Bowl_ID, orderEl.quantity], (err) => {
+                                    if (err) reject(err);
+                                    else resolve();
                                 });
-                            });
+                            } else {
+                                reject(new Error("Bowl not found for description: " + description));
+                            }
                         });
+                    });
+                });
 
-                        Promise.all(tasks)
-                            .then(() => resolve(Order_Id))
-                            .catch((err) => reject(err));
-
-                        resolve(row.Order_Id);
-                    }
-                })
+            Promise.all(tasks)
+                .then(() => resolve(Order_Id))
+                .catch((err) => reject(err));
             }
-        });
+        })
     });
 }
 
