@@ -64,3 +64,5 @@ let p = dbF.getProteins().then((result) => {console.log("Proteins: ", result); r
 //dbF.insertOrder(ord, 1113);
 
 //dbF.getBowlsBySize("R").then((result ) => console.log("lol:", JSON.stringify(result)))
+
+//dbF.deleteOrder(5)
