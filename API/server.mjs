@@ -2,6 +2,7 @@ import express from 'express'
 import morgan from 'morgan';
 import * as apif from './api_functions.mjs'
 import * as dbf from '../dbFunctions'
+import * as poke from '../poke.mjs'
 
 const app = express() ;
 
@@ -76,6 +77,17 @@ app.get('/bowls/size/:size', async (req, res) => {
     }
   }
 });
+
+// insert into database 
+app.post('/bowl', (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+
+  let b = new poke.Bowl()
+  
+  });
 
 let j = apif.getMainCollection()
 console.log(j)
