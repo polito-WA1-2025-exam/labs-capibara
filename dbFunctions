@@ -196,7 +196,31 @@ export function getBowlById(bowlId){
     });
 }
 
-
+/**
+ * Retrieves a list of bowls with a certain size size.
+ * @param {string} size - The desired bowl size.
+ * @returns {Promise<Object[]>} A promise that resolves to an array containing the bowl description parsed as an object.
+ */
+export function getBowlsBySize(size){
+    return new Promise( (resolve, reject) => {
+        if (! poke.validSizes.some((validSize) => validSize === size))
+            reject('invalid size');
+        else{
+            const sql = `SELECT Description FROM BOWL WHERE Size = ?`;
+            db.all(sql, [size], (err, rows) => {
+                if(err)
+                    reject(err);
+                else{
+                    let result = [];
+                    for(const item of rows){
+                        result.push(JSON.parse(item.Description))
+                    }
+                    resolve(result);
+                }
+            });
+        }
+    });
+}
 
 /**
  * Inserts a new bowl into the database if it doesn't already exist.

@@ -1,6 +1,7 @@
 import express from 'express'
 import morgan from 'morgan';
 import * as apif from './api_functions.mjs'
+import * as dbf from '../dbFunctions'
 
 const app = express() ;
 
@@ -57,6 +58,24 @@ app.get('/orders/:orderId', async (req, res) => {
     res.status(500).end();
   }
 })
+
+app.get('/bowls/size/:size', async (req, res) => {
+  const size = req.params.size;
+  try {
+    const o = await dbf.getBowlsBySize(size);
+    if (o.error) {
+      res.status(404).json(o);
+    } else {
+      res.json(o);
+    }
+  } catch (error) {
+    if (error === 'invalid size') { // Check error message for invalid size
+      res.status(400).json({ message: 'Invalid size provided', details: error.message });
+    } else {
+      res.status(500).json({ message: 'Internal server error'});
+    }
+  }
+});
 
 let j = apif.getMainCollection()
 console.log(j)
