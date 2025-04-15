@@ -58,7 +58,6 @@ app.get('/user/:id/name', (req, res) => {
 })
 
 //Retrieve the list of all items of the main collection.
-
 app.get('/orders', async (req, res) => {
     try {
         const o = await apif.getMainCollection();
@@ -89,6 +88,24 @@ app.get('/orders/:orderId', async (req, res) => {
   }
 })
 
+// delete an order by Id
+app.delete("/orders/:orderId", async (req, res) => {
+  const orderId = req.params.orderId;
+  if(!orderId){
+    res.status(400).send("orderId not specified")
+    return;
+  }
+
+  const o = dbf.deleteOrderById(orderId);
+
+  if(o.error) {
+    res.status(404).send(o);
+  } else {
+    res.status(200).send("Order deleted correctly");
+  }
+  
+});
+
 app.get('/bowls/size/:size', async (req, res) => {
   const size = req.params.size;
   try {
@@ -106,6 +123,8 @@ app.get('/bowls/size/:size', async (req, res) => {
     }
   }
 });
+
+
 
 
 // let j = apif.getMainCollection()
