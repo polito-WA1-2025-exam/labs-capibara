@@ -3,6 +3,7 @@ import morgan from 'morgan';
 import * as apif from './api_functions.mjs'
 import * as dbf from '../dbFunctions'
 import * as poke from '../poke.mjs'
+import { check, validationResult } from 'express-validator';
 
 const app = express() ;
 
@@ -17,10 +18,38 @@ app.get('/user', (req, res) => {
     res.json(u)
 })
 
+/*
 app.post('/user', (req, res) => {
     console.log(req.body)
     res.end()
 })
+*/
+
+// insert user into database 
+app.post('/user', 
+  [
+    check('username').isEmail(),
+    check('password').isLength({ min: 5 })],
+  (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+  const { username, password } = req.body;
+  let u = new poke.User(username, password);
+
+  dbf.registerUser(u).then(() => {
+    res.status(201).send('User registered successfully');
+  }).catch((err) => {
+    if (err.errno && err.errno == 19) {
+      res.status(400).send('User is already registered');
+    } else {
+      res.status(500).send('Error registering user: ' + err.message);
+    }
+  });
+  res.status(201);
+});
+
 
 app.get('/user/:id/name', (req, res) => {
     const id = req.params.id 
@@ -78,21 +107,14 @@ app.get('/bowls/size/:size', async (req, res) => {
   }
 });
 
-// insert into database 
-app.post('/bowl', (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.array() });
-  }
 
-  let b = new poke.Bowl()
-  
-  });
+// let j = apif.getMainCollection()
+// console.log(j)
 
-let j = apif.getMainCollection()
-console.log(j)
+
 // Activate server
 app.listen(3000, () =>	console.log('Server	ready')) ;
+app.use(express.json());
 
 
 

@@ -66,3 +66,6 @@ let p = dbF.getProteins().then((result) => {console.log("Proteins: ", result); r
 //dbF.getBowlsBySize("R").then((result ) => console.log("lol:", JSON.stringify(result)))
 
 //dbF.deleteOrder(5)
+
+
+

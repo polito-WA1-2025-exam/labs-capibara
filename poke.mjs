@@ -78,8 +78,7 @@ export function Bowl(size, base){
     }
 }
 
-export function User(username, email, password){
-    this.email = email;
+export function User(username, password){
     this.username = username;
     this.password = password;
 }
