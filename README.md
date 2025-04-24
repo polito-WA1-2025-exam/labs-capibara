@@ -30,3 +30,16 @@ In the app directory run
 npm install react-bootstrap
 npm install bootstrap
 ```
+
+## React Components structure:
+### Component structure for the order page
+```
+root
+├── Header
+├── Order
+│     ├── SelectSize
+│     ├── SelectBase
+│     ├── AddIngredients
+│     └── AddProteins
+└── Footer
+```
