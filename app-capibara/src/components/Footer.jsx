@@ -1,4 +1,4 @@
-import Container from 'react-bootstrap/Container';
+
 
 function Footer(){
     return(<p>&copy; 2025 Capibara Team</p>)

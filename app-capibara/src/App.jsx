@@ -3,15 +3,17 @@ import './App.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 {/* Components */}
-import Header from './contents/Header'
+import Header from './components/Header'
 
-import Footer from './contents/Footer'
+import Footer from './components/Footer'
 
 function App() {
   const [count, setCount] = useState(0)
 
   return <>
     <Header/>
+
+    
 
     <Footer/>
   </>;
