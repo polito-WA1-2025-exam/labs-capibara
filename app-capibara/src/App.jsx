@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 
 {/* Components */}
 import Header from './components/Header'
-
+import DisplayOrder from './components/DisplayOrder'
 import Footer from './components/Footer'
 
 function App() {
@@ -13,7 +13,7 @@ function App() {
   return <>
     <Header/>
 
-    
+    <DisplayOrder order = "placeHolder"/>
 
     <Footer/>
   </>;

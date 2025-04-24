@@ -15,7 +15,7 @@
 To run vite app run the following commands
 
 ```bash
-npm create vite@latest app-capibara
+# npm create vite@latest app-capibara # This must be avoided !!!!!!!!!
 
 # Choose from menu React and then Javascript
 
@@ -32,11 +32,26 @@ npm install bootstrap
 ```
 
 ## React Components structure:
-### Component structure for the order page
+### Component structure for the *show* order page
+Display the order resume
+
 ```
 root
 ├── Header
-├── Order
+├── DisplayOrder
+│       └── DisplayBowls
+│               └── DiplayBowl
+└── Footer
+```
+
+
+### Component structure for the *make* order page
+Order creation page
+
+```
+root
+├── Header
+├── DisplayOrders
 │     ├── SelectSize
 │     ├── SelectBase
 │     ├── AddIngredients
