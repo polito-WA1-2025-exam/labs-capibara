@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Compose and Add a Poke Bowl">
+    <meta name="author" content="Capibara Team">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <title>Compose Your Poke Bowl</title>
+</head>
+<body>
+    <header>
+        <div class="container-fluid">
+            <nav class="navbar navbar-expand-lg bg-body-tertiary">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="#">Capibara POKE</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Orders</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" id="orderResumeLink">Order Resume</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mt-4">
+        <h1 class="text-center">Compose Your Poke Bowl</h1>
+        <form id="pokeBowlForm">
+            <div class="mb-3">
+                <label for="bowlSize" class="form-label">Select Bowl Size</label>
+                <select class="form-select" id="bowlSize" required>
+                    <option value="" disabled selected>Select size</option>
+                    <option value="R">Regular (R)</option>
+                    <option value="M">Medium (M)</option>
+                    <option value="L">Large (L)</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="bowlBase" class="form-label">Select Base</label>
+                <select class="form-select" id="bowlBase" required>
+                    <option value="" disabled selected>Select base</option>
+                    <option value="Rice">Rice</option>
+                    <option value="Black_rice">Black Rice</option>
+                    <option value="Salad">Salad</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Add Ingredients</label>
+                <div id="ingredientsContainer">
+                    <div class="input-group mb-2">
+                        <select class="form-select ingredient-select">
+                            <option value="Avocado">Avocado</option>
+                            <option value="Ananas">Ananas</option>
+                            <option value="Cashew_nuts">Cashew Nuts</option>
+                            <option value="Kale">Kale</option>
+                            <option value="Mango">Mango</option>
+                        </select>
+                        <input type="number" class="form-control ingredient-quantity" placeholder="Quantity" min="1" value="1">
+                        <button type="button" class="btn btn-success add-ingredient"><i class="bi bi-plus"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Add Proteins</label>
+                <div id="proteinsContainer">
+                    <div class="input-group mb-2">
+                        <select class="form-select protein-select">
+                            <option value="Tuna">Tuna</option>
+                            <option value="Chicken">Chicken</option>
+                            <option value="Salmon">Salmon</option>
+                            <option value="Tofu">Tofu</option>
+                        </select>
+                        <input type="number" class="form-control protein-quantity" placeholder="Quantity" min="1" value="1">
+                        <button type="button" class="btn btn-success add-protein"><i class="bi bi-plus"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Add to Order</button>
+        </form>
+
+        <div id="orderResume" class="mt-4">
+            <h2>Order Resume</h2>
+            <ul id="orderList" class="list-group"></ul>
+        </div>
+    </main>
+
+    <footer class="footer mt-4 text-center">
+        <p>&copy; 2025 Capibara Team</p>
+    </footer>
+
+    <script>
+        const order = [];
+
+        document.getElementById('pokeBowlForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const size = document.getElementById('bowlSize').value;
+            const base = document.getElementById('bowlBase').value;
+
+            const ingredients = Array.from(document.querySelectorAll('.ingredient-select')).map((select, index) => ({
+                name: select.value,
+                quantity: parseInt(document.querySelectorAll('.ingredient-quantity')[index].value)
+            }));
+
+            const proteins = Array.from(document.querySelectorAll('.protein-select')).map((select, index) => ({
+                name: select.value,
+                quantity: parseInt(document.querySelectorAll('.protein-quantity')[index].value)
+            }));
+
+            const bowl = { size, base, ingredients, proteins };
+            order.push(bowl);
+
+            updateOrderResume();
+            alert('Bowl added to order!');
+        });
+
+        document.getElementById('ingredientsContainer').addEventListener('click', function(event) {
+            if (event.target.closest('.add-ingredient')) {
+                const container = document.getElementById('ingredientsContainer');
+                const newIngredient = container.firstElementChild.cloneNode(true);
+                container.appendChild(newIngredient);
+            }
+        });
+
+        document.getElementById('proteinsContainer').addEventListener('click', function(event) {
+            if (event.target.closest('.add-protein')) {
+                const container = document.getElementById('proteinsContainer');
+                const newProtein = container.firstElementChild.cloneNode(true);
+                container.appendChild(newProtein);
+            }
+        });
+
+        function updateOrderResume() {
+            const orderList = document.getElementById('orderList');
+            orderList.innerHTML = '';
+            order.forEach((bowl, index) => {
+                const listItem = document.createElement('li');
+                listItem.className = 'list-group-item';
+                listItem.textContent = `Bowl ${index + 1}: Size ${bowl.size}, Base ${bowl.base}, Ingredients: ${bowl.ingredients.map(i => `${i.name} (${i.quantity})`).join(', ')}, Proteins: ${bowl.proteins.map(p => `${p.name} (${p.quantity})`).join(', ')}`;
+                orderList.appendChild(listItem);
+            });
+        }
+
+        document.getElementById('orderResumeLink').addEventListener('click', function(event) {
+            event.preventDefault();
+            document.getElementById('orderResume').scrollIntoView({ behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>
