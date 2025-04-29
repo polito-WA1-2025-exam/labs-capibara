@@ -7,7 +7,7 @@ function Header() {
                 <Navbar.Brand href="#home" className="d-flex align-items-center">
                     <img
                         alt="Capibara Logo"
-                        src="/img/logo.png"
+                        src="/img/logo_clean.png"
                         width="40"
                         height="40"
                         className="d-inline-block align-top me-2"

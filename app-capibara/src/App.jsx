@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Order, Bowl } from '../../poke.mjs';
+import { Container } from 'react-bootstrap';
 
 import Header from './components/Header';
-import DisplayOrder from './components/DisplayOrder';
+import OrderBody from './components/OrderBody';
 import Footer from './components/Footer';
+
+import { Order, Bowl } from '../../poke.mjs';
 
 function App() {
     const [count, setCount] = useState(0);
@@ -25,15 +27,20 @@ function App() {
     placeholder.addBowlToOrder(bowl1, 2);
     placeholder.addBowlToOrder(bowl2, 1);
 
-    return (
-        <>
-            <Header />
-            <div className="mt-5 pt-4">
-                <DisplayOrder order={placeholder} />
-            </div>
-            <Footer/>
+    return (<>
+        
+        <Header />
+        
+        
+        {/* Add padding to prevent overlap */}
+        <div className="mt-5 pt-4">
+            <OrderBody order={placeholder} />
+        </div>
+
+        
+        <Footer/>
         </>
     );
 }
 
-export default App;
+export default App
