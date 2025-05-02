@@ -1,16 +1,34 @@
 import { Button, ButtonGroup, Card, Container, Form, InputGroup, Row } from "react-bootstrap";
-import { Bowl } from "../../../poke.mjs";
+import { Bowl, validIngredients, validProteins } from "../resources/poke.mjs";
 import {useState} from "react";
-import {Plus, Minecart, Dash}from "react-bootstrap-icons"
+import {Plus, Dash}from "react-bootstrap-icons"
 
 
 import '../App.css'
 
 function MakeOrder(props){
-    const [ingredientsEntry, setIngredientsEntry] = useState([<SelectIngredient key={0} />]);
 
+    // Take ingredients from the validIngredients and validProteins vectors
+    let ingredientsList = validIngredients;
+    let proteinsList = validProteins;
+
+    let ingredients = [];
+    let proteins = [];
+    
+    // Transform the two vectors int the right format: option for a React.Select
+    ingredientsList.forEach(ingredient => {
+        ingredients.push(<option value={ingredient}>{ingredient}</option>)
+    });
+    proteinsList.forEach(protein => {
+        proteins.push(<option value={protein}>{protein}</option>)
+    });
+
+    const [ingredientsEntry, setIngredientsEntry] = useState([<SelectIngredient key={0} ingredients={ingredients} />]);
+
+    
+ 
     const addIngredientField = () => {
-        setIngredientsEntry([...ingredientsEntry, <SelectIngredient key={ingredientsEntry.length} />]);
+        setIngredientsEntry([...ingredientsEntry, <SelectIngredient key={ingredientsEntry.length} ingredients={ingredients} />]);
     };
 
     const removeIngredientField = () => {
@@ -33,7 +51,11 @@ function MakeOrder(props){
             <SelectBase/>
 
             <h4 className="mt-3 mb-3">Select ingredients</h4>
-            <SelectIngredients ingredientsEntry={ingredientsEntry} addIngredientField={addIngredientField} removeIngredientField={removeIngredientField}/>
+            <SelectIngredients
+                ingredientsEntry={ingredientsEntry} 
+                addIngredientField={addIngredientField} 
+                removeIngredientField={removeIngredientField}
+            />
             </Card>
         </Form>
     </Container>);
@@ -58,6 +80,7 @@ function SelectBase(){
 }
 
 function SelectIngredients(props) {
+
     return (
         <>
             {props.ingredientsEntry}
@@ -83,14 +106,15 @@ function SelectIngredients(props) {
     );
 }
 
-function SelectIngredient(){
+function SelectIngredient(props){
+    
 
     return(<InputGroup className=" mb-1" aria-label="select ingredient">
         <Form.Select>
             <option isInvalid>Select ingredient</option>
-            <option value="R">Roba</option>
-            <option value="M">Altra Roba</option>
-            <option value="L">Boh</option>
+
+            {props.ingredients}
+
         </Form.Select>
         <Form.Control type="number" placeholder="Quantity" defaultValue={1} min={1} max={10}>
 
