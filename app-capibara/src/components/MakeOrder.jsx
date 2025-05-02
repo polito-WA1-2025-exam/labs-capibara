@@ -1,6 +1,10 @@
 import { Button, ButtonGroup, Card, Container, Form, InputGroup, Row } from "react-bootstrap";
 import { Bowl } from "../../../poke.mjs";
 import {useState} from "react";
+import {Plus, Minecart, Dash}from "react-bootstrap-icons"
+
+
+import '../App.css'
 
 function MakeOrder(props){
     const [ingredientsEntry, setIngredientsEntry] = useState([<SelectIngredient key={0} />]);
@@ -23,6 +27,8 @@ function MakeOrder(props){
     return(<Container>
         <Form>
             <Card>
+            <h4 className="mt-3 mb-3">Select bowl size and base</h4>
+
             <SelectSize/>
             <SelectBase/>
 
@@ -52,25 +58,27 @@ function SelectBase(){
 }
 
 function SelectIngredients(props) {
-    
-
     return (
         <>
             {props.ingredientsEntry}
-            <ButtonGroup>
-                <Button
-                    className="btn btn-danger add-ingredient mt-2"
-                    onClick={props.removeIngredientField}
-                >
-                    Remove Ingredient
-                </Button>
-                <Button
-                    className="btn btn-success add-ingredient mt-2"
-                    onClick={props.addIngredientField}
-                >
-                    Add Ingredient
-                </Button>
-            </ButtonGroup>
+            <div className="d-flex justify-content-center mt-3">
+                <ButtonGroup>
+                    <Button
+                        className="btn small-button add-ingredient me-2"
+                        onClick={props.removeIngredientField}
+                        variant="outline-danger"
+                    >
+                        <Dash />
+                    </Button>
+                    <Button
+                        className="btn small-button add-ingredient"
+                        onClick={props.addIngredientField}
+                        variant="outline-success"
+                    >
+                        <Plus />
+                    </Button>
+                </ButtonGroup>
+            </div>
         </>
     );
 }
