@@ -3,6 +3,7 @@ import { Table, Container, Card } from 'react-bootstrap';
 function DisplayOrder(props) {
     const o = props.order;
 
+
     return (
         <Container className="mt-4">
             <Card>

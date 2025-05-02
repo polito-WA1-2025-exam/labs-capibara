@@ -3,7 +3,16 @@ import Tabs from 'react-bootstrap/Tabs';
 import { Container } from 'react-bootstrap';
 import DisplayOrder from './DisplayOrder';
 
+
+import { useState } from 'react';
+import { Order } from '../../../poke.mjs';
+import MakeOrder from './MakeOrder';
+
 function OrderBody(props) {
+    const [order, setOrder] = useState(new Order(props.user));
+
+    
+
     const o = props.order
 
     return <Tabs
@@ -12,7 +21,9 @@ function OrderBody(props) {
         className="mb-3"
         >
         <Tab eventKey="Select_Ingredients" title="Select Ingredients">
-            Tab content for Make order page
+            
+            <MakeOrder order = {o} />
+
         </Tab>
 
         <Tab eventKey="Order Resume" title="Order Resume">
