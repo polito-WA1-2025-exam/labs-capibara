@@ -1,7 +1,23 @@
-import { Card, Container, Form, InputGroup, Row } from "react-bootstrap";
+import { Button, ButtonGroup, Card, Container, Form, InputGroup, Row } from "react-bootstrap";
 import { Bowl } from "../../../poke.mjs";
+import {useState} from "react";
 
 function MakeOrder(props){
+    const [ingredientsEntry, setIngredientsEntry] = useState([<SelectIngredient key={0} />]);
+
+    const addIngredientField = () => {
+        setIngredientsEntry([...ingredientsEntry, <SelectIngredient key={ingredientsEntry.length} />]);
+    };
+
+    const removeIngredientField = () => {
+        setIngredientsEntry((oldIngr) => {
+            let newIngr = [...oldIngr];
+            newIngr.pop();
+            return newIngr;
+        } )
+    }
+
+
     const order = props.order;
     
     return(<Container>
@@ -11,7 +27,7 @@ function MakeOrder(props){
             <SelectBase/>
 
             <h4 className="mt-3 mb-3">Select ingredients</h4>
-            <SelectIngredients/>
+            <SelectIngredients ingredientsEntry={ingredientsEntry} addIngredientField={addIngredientField} removeIngredientField={removeIngredientField}/>
             </Card>
         </Form>
     </Container>);
@@ -35,8 +51,28 @@ function SelectBase(){
       </Form.Select>);
 }
 
-function SelectIngredients(){
-    return (<SelectIngredient/>);
+function SelectIngredients(props) {
+    
+
+    return (
+        <>
+            {props.ingredientsEntry}
+            <ButtonGroup>
+                <Button
+                    className="btn btn-danger add-ingredient mt-2"
+                    onClick={props.removeIngredientField}
+                >
+                    Remove Ingredient
+                </Button>
+                <Button
+                    className="btn btn-success add-ingredient mt-2"
+                    onClick={props.addIngredientField}
+                >
+                    Add Ingredient
+                </Button>
+            </ButtonGroup>
+        </>
+    );
 }
 
 function SelectIngredient(){
@@ -48,19 +84,15 @@ function SelectIngredient(){
             <option value="M">Altra Roba</option>
             <option value="L">Boh</option>
         </Form.Select>
-        <Form.Control 
-            type="number"
-            placeholder="Quantity" 
-            
-            value="1"
-        >
+        <Form.Control type="number" placeholder="Quantity" defaultValue={1} min={1} max={10}>
 
         </Form.Control>
     </InputGroup>)
 }
 
 function SelectProteins(){
-
+    return(<>
+    </>)
 
 }
 
