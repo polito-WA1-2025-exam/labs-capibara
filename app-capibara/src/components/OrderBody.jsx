@@ -10,7 +10,7 @@ import MakeOrder from './MakeOrder';
 
 function OrderBody(props) {
     const [order, setOrder] = useState(new Order(props.user));
-
+    
     
 
     const o = props.order

@@ -23,10 +23,9 @@ function MakeOrder(props){
         proteins.push(<option value={protein}>{protein}</option>)
     });
 
+    // State for ingredient form select entries
     const [ingredientsEntry, setIngredientsEntry] = useState([<SelectIngredient key={0} ingredients={ingredients} />]);
 
-    
- 
     const addIngredientField = () => {
         setIngredientsEntry([...ingredientsEntry, <SelectIngredient key={ingredientsEntry.length} ingredients={ingredients} />]);
     };
@@ -34,11 +33,29 @@ function MakeOrder(props){
     const removeIngredientField = () => {
         setIngredientsEntry((oldIngr) => {
             let newIngr = [...oldIngr];
-            newIngr.pop();
+            if(oldIngr.length > 1){
+                newIngr.pop();
+            }
             return newIngr;
         } )
     }
 
+    // State for protein form select entries
+    const [proteinsEntry, setProteinsEntry] = useState([<SelectProtein key={0} proteins={proteins} />]);
+
+    const addProteinField = () => {
+        setProteinsEntry([...proteinsEntry, <SelectProtein key={proteinsEntry.length} proteins={proteins} />]);
+    };
+
+    const removeProteinField = () => {
+        setProteinsEntry((oldProt) => {
+            let newProt = [...oldProt];
+            if(oldProt.length > 1){
+                newProt.pop();
+            }
+            return newProt;
+        } )
+    }
 
     const order = props.order;
     
@@ -56,6 +73,14 @@ function MakeOrder(props){
                 addIngredientField={addIngredientField} 
                 removeIngredientField={removeIngredientField}
             />
+            
+
+            <SelectProteins
+                proteinsEntry={proteinsEntry} 
+                addProteinField={addProteinField} 
+                removeProteinField={removeProteinField}
+            />
+
             </Card>
         </Form>
     </Container>);
@@ -84,7 +109,7 @@ function SelectIngredients(props) {
     return (
         <>
             {props.ingredientsEntry}
-            <div className="d-flex justify-content-center mt-3">
+            <div className="d-flex justify-content-center mt-3 mb-3">
                 <ButtonGroup>
                     <Button
                         className="btn small-button add-ingredient me-2"
@@ -122,10 +147,47 @@ function SelectIngredient(props){
     </InputGroup>)
 }
 
-function SelectProteins(){
-    return(<>
-    </>)
+function SelectProteins(props){
+    return (
+        <>
+            {props.proteinsEntry}
+            <div className="d-flex justify-content-center mt-3 mb-3">
+                <ButtonGroup>
+                    <Button
+                        className="btn small-button rem-protein me-2"
+                        onClick={props.removeProteinField}
+                        variant="outline-danger"
+                    >
+                        <Dash />
+                    </Button>
+                    <Button
+                        className="btn small-button add-protein"
+                        onClick={props.addProteinField}
+                        variant="outline-success"
+                    >
+                        <Plus />
+                    </Button>
+                </ButtonGroup>
+            </div>
+        </>
+    );
 
+}
+
+function SelectProtein(props){
+    
+
+    return(<InputGroup className=" mb-1" aria-label="select protein">
+        <Form.Select>
+            <option>Select protein</option>
+
+            {props.proteins}
+
+        </Form.Select>
+        <Form.Control type="number" placeholder="Quantity" defaultValue={1} min={1} max={10}>
+
+        </Form.Control>
+    </InputGroup>)
 }
 
 
