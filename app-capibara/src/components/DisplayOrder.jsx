@@ -21,7 +21,7 @@ function DisplayOrder(props) {
                             </tr>
                         </thead>
                         <tbody>
-                            <DisplayBowls bowls={o.bowls} />
+                            <DisplayBowls bowls={o} />
                         </tbody>
                     </Table>
                 </Card.Body>

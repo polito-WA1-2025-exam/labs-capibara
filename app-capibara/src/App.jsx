@@ -7,7 +7,7 @@ import Header from './components/Header';
 import OrderBody from './components/OrderBody';
 import Footer from './components/Footer';
 
-import { Order, Bowl } from '../../poke.mjs';
+import { Order, Bowl } from "./resources/poke.mjs";
 
 function App() {
     const [count, setCount] = useState(0);
@@ -34,7 +34,7 @@ function App() {
         
         {/* Add padding to prevent overlap */}
         <div className="mt-5 pt-4">
-            <OrderBody order={placeholder} />
+            <OrderBody order={placeholder} user="example@gmail.com" />
         </div>
 
         
