@@ -61,12 +61,21 @@ function MakeOrder(props){
         });
     }
 
-    const delIngredient = () => {
+    const delIngredient = (id) => {
         setBowlIngredients((oldIngr) =>{
             let newIngr = [...oldIngr];
-            newIngr.pop();
+            newIngr.map((ingr, i) => {
+
+            })
             return newIngr;
         });
+    }
+
+    // to be completed
+    const manageIngredient = (id, ingredient) => {
+        if(id > bowlIngredients.size){
+            addIngredient();
+        }
     }
 
     /// PROTEINS
@@ -107,7 +116,7 @@ function MakeOrder(props){
     const [ingredientsEntry, setIngredientsEntry] = useState([<SelectIngredient key={0} ingredients={ingredients} />]);
 
     const addIngredientField = () => {
-        setIngredientsEntry([...ingredientsEntry, <SelectIngredient key={ingredientsEntry.length} ingredients={ingredients} />]);
+        setIngredientsEntry([...ingredientsEntry, <SelectIngredient key={ingredientsEntry.length} childKey={ingredientsEntry.length} ingredients={ingredients} />]);
     };
 
     const removeIngredientField = () => {
@@ -124,7 +133,7 @@ function MakeOrder(props){
     const [proteinsEntry, setProteinsEntry] = useState([<SelectProtein key={0} proteins={proteins} />]);
 
     const addProteinField = () => {
-        setProteinsEntry([...proteinsEntry, <SelectProtein key={proteinsEntry.length} proteins={proteins} />]);
+        setProteinsEntry([...proteinsEntry, <SelectProtein key={proteinsEntry.length} childKey={proteinsEntry.length} proteins={proteins} />]);
     };
 
     const removeProteinField = () => {
@@ -150,6 +159,7 @@ function MakeOrder(props){
             b.updatePrice();
             console.log(b.size, " ", b.base);
             props.addBowlToOrder(b);
+            
         }
         console.log("debug send caller")
 
@@ -231,9 +241,8 @@ function SelectIngredients(props) {
 }
 
 function SelectIngredient(props){
-    
-
-    return(<InputGroup className=" mb-1" aria-label="select ingredient">
+    return(<InputGroup elementKey={props.childKey} className=" mb-1" aria-label="select ingredient">
+        
         <Form.Select>
             <option isInvalid>Select ingredient</option>
 
@@ -276,7 +285,7 @@ function SelectProteins(props){
 function SelectProtein(props){
     
 
-    return(<InputGroup className=" mb-1" aria-label="select protein">
+    return(<InputGroup elementKey={props.childKey} className=" mb-1" aria-label="select protein">
         <Form.Select>
             <option>Select protein</option>
 

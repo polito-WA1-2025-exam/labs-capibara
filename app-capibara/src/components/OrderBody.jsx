@@ -4,7 +4,7 @@ import { Container } from 'react-bootstrap';
 import DisplayOrder from './DisplayOrder';
 
 
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 
 import { Order } from "../resources/poke.mjs";
 import MakeOrder from './MakeOrder';
@@ -13,20 +13,19 @@ function OrderBody(props) {
     const [order, setOrder] = useState([]);
     
     const addBowl = (bowl) => {
-        setOrder((oldOrder) => {
-            let newOrder = [...oldOrder]
-            // If the bowl is already in the order
-            newOrder.forEach(b => {
-                if(JSON.stringify(bowl) === JSON.stringify(b.bowl)){
-                    b.quantity += 1;
-                    return;
-                }
-            });
-            // If the  desired bowl is not yet in the order
-            newOrder.push({"bowl": bowl, "quantity": 1});
-            return newOrder;
+        setOrder(oldOrder => {
+            const idx = oldOrder.findIndex(item => {return JSON.stringify(item.bowl) === JSON.stringify(bowl)});
+            if (idx !== -1) {
+            return oldOrder.map((item, i) =>
+                i === idx ?
+                    { ...item, quantity: item.quantity + 1 } :
+                    item
+            );
+            } else {
+            return [...oldOrder, { bowl, quantity: 1 }];
+            }
         });
-    }
+      };
 
 
     const o = props.order

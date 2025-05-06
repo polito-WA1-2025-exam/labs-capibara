@@ -1,7 +1,7 @@
 import { Table, Container, Card } from 'react-bootstrap';
 
 function DisplayOrder(props) {
-    const o = props.order;
+    const order = props.order;
 
 
     return (
@@ -14,6 +14,8 @@ function DisplayOrder(props) {
                     <Table striped bordered hover responsive>
                         <thead className="table-dark">
                             <tr>
+                                <th>n</th>
+                                <th>Size</th>
                                 <th>Base</th>
                                 <th>Ingredients</th>
                                 <th>Proteins</th>
@@ -21,7 +23,7 @@ function DisplayOrder(props) {
                             </tr>
                         </thead>
                         <tbody>
-                            <DisplayBowls bowls={o} />
+                            <DisplayBowls bowls={order} />
                         </tbody>
                     </Table>
                 </Card.Body>
@@ -32,17 +34,20 @@ function DisplayOrder(props) {
 
 function DisplayBowls(props) {
     const bowls = props.bowls;
-
+    let k = 0;
     const rows = [];
     for (const item of bowls) {
         rows.push(
-            <tr key={item.bowl.base + item.quantity}>
+            <tr key={k}>
+                <td>{k+1}</td>
+                <td>{item.bowl.size}</td>
                 <td>{item.bowl.base}</td>
                 <td>{item.bowl.ingredients.join(', ')}</td>
                 <td>{item.bowl.proteins.join(', ')}</td>
                 <td>{item.quantity}</td>
             </tr>
         );
+        k++;
     }
 
     return <>{rows}</>;

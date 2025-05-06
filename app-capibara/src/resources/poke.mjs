@@ -89,19 +89,23 @@ export function Order(user){
     this.bowlsNum = 0;
 
     this.addBowlToOrder = (bowl, quantity = 1) => {
+        let found = false;
+    
         // update the number of bowls in the order
         this.bowlsNum += quantity;
 
         // If the bowl is already in the order
         this.bowls.forEach(b => {
-            if(JSON.stringify(bowl) == JSON.stringify(b.bowl)){
+            if(JSON.stringify(bowl) === JSON.stringify(b.bowl)){
                 b.quantity += quantity;
+                found = true;
                 return;
             }
         })
         
         // If the  desired bowl is not yet in the order
-        this.bowls.push({"bowl": bowl, "quantity": quantity})
+        if(!found) {this.bowls.push({"bowl": bowl, "quantity": quantity});}
+        return;
     }
 
 }
