@@ -77,7 +77,7 @@ function MakeOrder(props){
 
         let newIngr;
         
-        if(id >= bowlIngredients.length || bowlIngredients.length == 0){
+        if(id >= bowlIngredients.length || bowlIngredients.length-1 == 0){
             
             setBowlIngredients((oldIngr) => {
                 newIngr = [...oldIngr];
