@@ -24,7 +24,11 @@ function DisplayOrder(props) {
                             </tr>
                         </thead>
                         <tbody>
-                            <DisplayBowls bowls={order} />
+                            <DisplayBowls 
+                                bowls={order} 
+                                deleteBowlFromOrder={props.deleteBowlFromOrder}
+                                editBowlInOrder={props.editBowlInOrder}
+                            />
                         </tbody>
                     </Table>
                 </Card.Body>
@@ -34,30 +38,27 @@ function DisplayOrder(props) {
 }
 
 function DisplayBowls(props) {
-    const bowls = props.bowls;
-    let k = 0;
-    const rows = [];
-    for (const item of bowls) {
-        rows.push(
-            <tr key={k}>
-                <td>{k+1}</td>
-                <td>{item.bowl.size}</td>
-                <td>{item.bowl.base}</td>
-                <td>{item.bowl.ingredients.join(', ')}</td>
-                <td>{item.bowl.proteins.join(', ')}</td>
-                <td>{item.quantity}</td>
-                <td> 
-                    <ButtonGroup>
-                        <Button variant='warning'> Edit </Button>
-                        <Button variant='danger'> Delete </Button>
-                    </ButtonGroup>
-                </td>
-            </tr>
-        );
-        k++;
-    }
-
-    return <>{rows}</>;
+    return (
+        <>
+            {props.bowls.map((item, idx) => (
+                <tr key={idx}>
+                    <td>{idx + 1}</td>
+                    <td>{item.bowl.size}</td>
+                    <td>{item.bowl.base}</td>
+                    <td>{item.bowl.ingredients.join(', ')}</td>
+                    <td>{item.bowl.proteins.join(', ')}</td>
+                    <td>{item.quantity}</td>
+                    <td>
+                        <ButtonGroup>
+                            <Button variant='ok'> +1 </Button>
+                            <Button variant='warning' onClick={() => props.editBowlInOrder(idx)}> Edit </Button>
+                            <Button variant='danger' onClick={() => props.deleteBowlFromOrder(idx)}> -1 </Button>
+                        </ButtonGroup>
+                    </td>
+                </tr>
+            ))}
+        </>
+    );
 }
 
 export default DisplayOrder;

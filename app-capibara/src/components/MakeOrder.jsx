@@ -1,5 +1,5 @@
-import { Button, ButtonGroup, Card, Container, Form, InputGroup, Row } from "react-bootstrap";
-import { Bowl, validBases, validIngredients, validProteins, validSizes } from "../resources/poke.mjs";
+import { Button, ButtonGroup, Card, Container, Form} from "react-bootstrap";
+import { Bowl, validBases, validSizes } from "../resources/poke.mjs";
 import {useEffect, useState} from "react";
 import {Plus, Dash}from "react-bootstrap-icons"
 import { useRef } from "react";
@@ -8,155 +8,16 @@ import { useRef } from "react";
 import '../App.css'
 
 function MakeOrder(props){
-
-    // state for the new bowl
-    //const [bowl, setBowl] = useState(null);
-    const [bowlBase, setBowlBase] = useState(null);
-    const [bowlSize, setBowlSize] = useState(null);
-    const [bowlIngredients, setBowlIngredients] = useState([]);
-    const [bowlProteins, setBowlProteins] = useState([]);
-
-    /// BASE
-    const addBase = (base) => {
-        if (validBases.includes(base)) {
-            setBowlBase(base);
-        } 
-    }
-
-    /// SIZE
-    const addSize = (size) => {
-        if (validSizes.includes(size)){
-            setBowlSize(size);
-        } 
-    }
     
-    const manageIngredient = (id, ingredient) => {
-
-        let newIngr;
-        
-        if(id >= bowlIngredients.length || bowlIngredients.length-1 == 0){
-            
-            setBowlIngredients((oldIngr) => {
-                newIngr = [...oldIngr];
-                newIngr.push(ingredient);
-                return newIngr;
-            });
-        } else {
-            setBowlIngredients((oldIngr) =>{
-                newIngr = [...oldIngr];
-                newIngr.map((ingr, i) => {
-                    if(id == i){
-                        ingr = ingredient;
-                        return ingr
-                    }   
-            });
-                //newIngr[id] = ingredient;
-                return newIngr;
-            });
-
-
-        }
-
-        /*useEffect(() => {
-            console.log("Whole ingr vector: "+bowlIngredients+"\n")
-        }, [bowlIngredients]);*/
-    }
-
-    /// PROTEINS
-
-    const manageProtein = (id, protein) => {
-
-        let newProt;
-        
-        if(id >= bowlProteins.length || bowlProteins.length-1 == 0){
-            
-            setBowlProteins((oldProt) => {
-                newProt = [...oldProt];
-                newProt.push(protein);
-                return newProt;
-            });
-        } else {
-            setBowlProteins((oldProt) =>{
-                newProt = [...oldProt];
-                newProt.map((prot, i) => {
-                    if(id == i){
-                        prot = protein;
-                        return prot
-                    }   
-            });
-                //newIngr[id] = ingredient;
-                return newProt;
-            });
-
-
-        }
-
-        /*useEffect(() => {
-            console.log("Whole ingr vector: "+bowlIngredients+"\n")
-        }, [bowlIngredients]);*/
-    }
-
-
-    /////////////////////////////////////////////////
-
-    // Take ingredients from the validIngredients and validProteins vectors
-    let ingredientsList = validIngredients;
-    let proteinsList = validProteins;
-
-    let ingredients = [];
-    let proteins = [];
-    
-    // Transform the two vectors int the right format: option for a React.Select
-    ingredientsList.forEach(ingredient => {
-        ingredients.push(<option value={ingredient}>{ingredient}</option>)
-    });
-    proteinsList.forEach(protein => {
-        proteins.push(<option value={protein}>{protein}</option>)
-    });
-
-    // State for ingredient form select entries
-    const [ingredientsEntry, setIngredientsEntry] = useState([<SelectIngredient key={0} id={0} ingredients={ingredients} manageIngredient={manageIngredient} />]);
-
-    const addIngredientField = () => {
-        setIngredientsEntry([...ingredientsEntry, <SelectIngredient key={ingredientsEntry.length} id={ingredientsEntry.length} ingredients={ingredients} manageIngredient={manageIngredient} />]);
-    };
-
-    const removeIngredientField = () => {
-        setIngredientsEntry((oldIngr) => {
-            let newIngr = [...oldIngr];
-            if(oldIngr.length > 1){
-                newIngr.pop();
-            }
-            return newIngr;
-        } )
-    }
-
-    // State for protein form select entries
-    const [proteinsEntry, setProteinsEntry] = useState([<SelectProtein key={0} id={0} proteins={proteins} manageProtein={manageProtein} />]);
-
-    const addProteinField = () => {
-        setProteinsEntry([...proteinsEntry, <SelectProtein key={proteinsEntry.length} id={proteinsEntry.length} proteins={proteins} manageProtein={manageProtein} />]);
-    };
-
-    const removeProteinField = () => {
-        setProteinsEntry((oldProt) => {
-            let newProt = [...oldProt];
-            if(oldProt.length > 1){
-                newProt.pop();
-            }
-            return newProt;
-        } )
-    }
-
     const submitBowl = (e) => {
         e.preventDefault(); // prevent the page from reloading (defult behavior)
         e.stopPropagation()
 
-        if(!!bowlBase && !!bowlSize){
-            let b = new Bowl(bowlSize, bowlBase);
+        if(!!props.bowlBase && !!props.bowlSize){
+            let b = new Bowl(props.bowlSize, props.bowlBase);
 
-            bowlIngredients.forEach((ingr) => b.addIngredient(ingr));
-            bowlProteins.forEach((prot) => b.addProtein(prot));
+            props.bowlIngredients.forEach((ingr) => b.addIngredient(ingr));
+            props.bowlProteins.forEach((prot) => b.addProtein(prot));
 
             b.updatePrice();
             console.log(b.size, " ", b.base);
@@ -167,26 +28,28 @@ function MakeOrder(props){
 
     }
     
-    return(<Container>
+    
+
+    return(<Container on>
         <Form>
             <Card>
             <h4 className="mt-3 mb-3">Select bowl size and base</h4>
 
-            <SelectSize addSize={addSize}/>
-            <SelectBase addBase={addBase}/>
+            <SelectSize addSize={props.addSize}/>
+            <SelectBase addBase={props.addBase}/>
 
             <h4 className="mt-3 mb-3">Select ingredients</h4>
             <SelectIngredients
-                ingredientsEntry={ingredientsEntry} 
-                addIngredientField={addIngredientField} 
-                removeIngredientField={removeIngredientField}
+                ingredientsEntry={props.ingredientsEntry} 
+                addIngredientField={() => props.addIngredientField(props.manageIngredient)} 
+                removeIngredientField={props.removeIngredientField}
             />
             
 
             <SelectProteins
-                proteinsEntry={proteinsEntry} 
-                addProteinField={addProteinField} 
-                removeProteinField={removeProteinField}
+                proteinsEntry={props.proteinsEntry} 
+                addProteinField={() => props.addProteinField(props.manageProtein)} 
+                removeProteinField={props.removeProteinField}
             />
 
 
@@ -217,8 +80,12 @@ function SelectBase(props){
 
 function SelectIngredients(props) {
 
+    // initialization
+    // props.addIngredientField()
+
     return (
         <>
+            
             {props.ingredientsEntry}
             <div className="d-flex justify-content-center mt-3 mb-3">
                 <ButtonGroup>
@@ -242,20 +109,7 @@ function SelectIngredients(props) {
     );
 }
 
-function SelectIngredient(props){
-    return(<InputGroup id={props.id} className=" mb-1" aria-label="select ingredient">
-        
-        <Form.Select onChange={(e) => props.manageIngredient(props.id, e.target.value)}>
-            <option isInvalid>Select ingredient</option>
 
-            {props.ingredients}
-
-        </Form.Select>
-        <Form.Control type="number" placeholder="Quantity" defaultValue={1} min={1} max={10}>
-
-        </Form.Control>
-    </InputGroup>)
-}
 
 function SelectProteins(props){
     return (
@@ -283,26 +137,6 @@ function SelectProteins(props){
     );
 
 }
-
-function SelectProtein(props){
-    
-
-    return(
-        <InputGroup id={props.id} className=" mb-1" aria-label="select protein">
-            <Form.Select onChange={(e) => props.manageProtein(props.id, e.target.value)}>
-                <option>Select protein</option>
-
-                {props.proteins}
-
-            </Form.Select>
-            <Form.Control type="number" placeholder="Quantity" defaultValue={1} min={1} max={10}>
-
-            </Form.Control>
-        </InputGroup>
-    )
-}
-
-
 
 
 export default MakeOrder
