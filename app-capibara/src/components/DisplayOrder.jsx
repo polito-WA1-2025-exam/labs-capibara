@@ -1,4 +1,4 @@
-import { Table, Container, Card } from 'react-bootstrap';
+import { Table, Container, Card, ButtonGroup, Button } from 'react-bootstrap';
 
 function DisplayOrder(props) {
     const order = props.order;
@@ -20,6 +20,7 @@ function DisplayOrder(props) {
                                 <th>Ingredients</th>
                                 <th>Proteins</th>
                                 <th>Quantity</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -45,6 +46,12 @@ function DisplayBowls(props) {
                 <td>{item.bowl.ingredients.join(', ')}</td>
                 <td>{item.bowl.proteins.join(', ')}</td>
                 <td>{item.quantity}</td>
+                <td> 
+                    <ButtonGroup>
+                        <Button variant='warning'> Edit </Button>
+                        <Button variant='danger'> Delete </Button>
+                    </ButtonGroup>
+                </td>
             </tr>
         );
         k++;

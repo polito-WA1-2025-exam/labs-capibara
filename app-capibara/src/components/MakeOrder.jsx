@@ -8,35 +8,13 @@ import { useRef } from "react";
 import '../App.css'
 
 function MakeOrder(props){
+
     // state for the new bowl
     //const [bowl, setBowl] = useState(null);
     const [bowlBase, setBowlBase] = useState(null);
     const [bowlSize, setBowlSize] = useState(null);
     const [bowlIngredients, setBowlIngredients] = useState([]);
     const [bowlProteins, setBowlProteins] = useState([]);
-
-    /// BOWL
-    // create
-    /*const createBowl = () => {
-        setBowl(() => {
-            if(!!bowlBase && !!bowlSize){
-                let b = new Bowl(bowlSize, bowlBase);
-    
-                bowlIngredients.forEach((ingr) => b.addIngredient(ingr));
-                bowlProteins.forEach((prot) => b.addProtein(prot));
-    
-                b.updatePrice();
-    
-                return b
-            }
-        })
-    }*/
-
-    // delete
-    // todo!
-
-    // modify
-    // todo!
 
     /// BASE
     const addBase = (base) => {
@@ -48,32 +26,11 @@ function MakeOrder(props){
     /// SIZE
     const addSize = (size) => {
         if (validSizes.includes(size)){
-            //console.log("debug onChange")
             setBowlSize(size);
         } 
     }
-
-    /// INGREDIENTS
-    const addIngredient = (ingredient) => {
-        setBowlIngredients((oldIngr) => {
-            let newIngr = [...oldIngr, ingredient];
-            return newIngr;
-        });
-    }
-
-    const delIngredient = (id) => {
-        setBowlIngredients((oldIngr) =>{
-            let newIngr = [...oldIngr];
-            newIngr.map((ingr, i) => {
-
-            })
-            return newIngr;
-        });
-    }
-
-    // to be completed
+    
     const manageIngredient = (id, ingredient) => {
-        console.log("Yay, Ima call manageIngredient\nid: "+id+" ingredient: "+ingredient)
 
         let newIngr;
         
@@ -106,19 +63,37 @@ function MakeOrder(props){
     }
 
     /// PROTEINS
-    const addProtein = (protein) => {
-        setBowlProteins((oldProt) => {
-            let newIngr = [...oldProt, protein];
-            return newIngr;
-        });
-    }
 
-    const delProtein = () => {
-        setBowlProteins((oldProt) =>{
-            let newProt = [...oldProt];
-            newProt.pop();
-            return newProt;
-        });
+    const manageProtein = (id, protein) => {
+
+        let newProt;
+        
+        if(id >= bowlProteins.length || bowlProteins.length-1 == 0){
+            
+            setBowlProteins((oldProt) => {
+                newProt = [...oldProt];
+                newProt.push(protein);
+                return newProt;
+            });
+        } else {
+            setBowlProteins((oldProt) =>{
+                newProt = [...oldProt];
+                newProt.map((prot, i) => {
+                    if(id == i){
+                        prot = protein;
+                        return prot
+                    }   
+            });
+                //newIngr[id] = ingredient;
+                return newProt;
+            });
+
+
+        }
+
+        /*useEffect(() => {
+            console.log("Whole ingr vector: "+bowlIngredients+"\n")
+        }, [bowlIngredients]);*/
     }
 
 
@@ -157,10 +132,10 @@ function MakeOrder(props){
     }
 
     // State for protein form select entries
-    const [proteinsEntry, setProteinsEntry] = useState([<SelectProtein key={0} proteins={proteins} />]);
+    const [proteinsEntry, setProteinsEntry] = useState([<SelectProtein key={0} id={0} proteins={proteins} manageProtein={manageProtein} />]);
 
     const addProteinField = () => {
-        setProteinsEntry([...proteinsEntry, <SelectProtein key={proteinsEntry.length} childKey={proteinsEntry.length} proteins={proteins} />]);
+        setProteinsEntry([...proteinsEntry, <SelectProtein key={proteinsEntry.length} id={proteinsEntry.length} proteins={proteins} manageProtein={manageProtein} />]);
     };
 
     const removeProteinField = () => {
@@ -312,17 +287,19 @@ function SelectProteins(props){
 function SelectProtein(props){
     
 
-    return(<InputGroup elementkey={props.childKey} className=" mb-1" aria-label="select protein">
-        <Form.Select>
-            <option>Select protein</option>
+    return(
+        <InputGroup id={props.id} className=" mb-1" aria-label="select protein">
+            <Form.Select onChange={(e) => props.manageProtein(props.id, e.target.value)}>
+                <option>Select protein</option>
 
-            {props.proteins}
+                {props.proteins}
 
-        </Form.Select>
-        <Form.Control type="number" placeholder="Quantity" defaultValue={1} min={1} max={10}>
+            </Form.Select>
+            <Form.Control type="number" placeholder="Quantity" defaultValue={1} min={1} max={10}>
 
-        </Form.Control>
-    </InputGroup>)
+            </Form.Control>
+        </InputGroup>
+    )
 }
 
 
