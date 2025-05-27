@@ -2,10 +2,11 @@ import { useState } from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container } from 'react-bootstrap';
+import { Route, Routes } from 'react-router';
 
-import Header from './components/Header';
+import Layout from './components/Header';
 import OrderBody from './components/OrderBody';
-import Footer from './components/Footer';
+import NotFound from './components/NotFound';
 
 import { Order, Bowl } from "./resources/poke.mjs";
 
@@ -27,19 +28,16 @@ function App() {
     placeholder.addBowlToOrder(bowl1, 2);
     placeholder.addBowlToOrder(bowl2, 1);
 
-    return (<>
-        
-        <Header />
-        
-        
-        {/* Add padding to prevent overlap */}
-        <div className="mt-5 pt-4">
-            <OrderBody order={placeholder} user="example@gmail.com" />
-        </div>
-
-        
-        <Footer/>
-        </>
+    return (
+    <>    
+        <Routes>
+            <Route path="/" element= {<Layout />}>
+                <Route index element={<NotFound />} />
+                <Route path="order" element={<OrderBody />} />
+                <Route path="*" element={<NotFound />} />
+            </Route>
+        </Routes>
+    </>
     );
 }
 

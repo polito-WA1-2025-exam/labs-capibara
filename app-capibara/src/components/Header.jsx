@@ -1,8 +1,11 @@
 import { Container, Navbar, Nav } from 'react-bootstrap';
+import { Outlet } from 'react-router'
+import Footer from './Footer';
 
-function Header() {
+function Layout() {
     return (
-        <Navbar expand="lg" className="bg-dark navbar-dark fixed-top">
+        <>
+        <Navbar expand="lg" className="d-flex bg-dark navbar-dark fixed-top position-absolute top-0" >
             <Container>
                 <Navbar.Brand href="#home" className="d-flex align-items-center">
                     <img
@@ -23,8 +26,22 @@ function Header() {
                     </Nav>
                 </Navbar.Collapse>
             </Container>
+            
         </Navbar>
+
+        <Container>
+
+        </Container>
+
+        <Container>
+            <Outlet/>
+        </Container>
+        
+        
+        <Footer/>
+
+        </>
     );
 }
 
-export default Header;
+export default Layout;

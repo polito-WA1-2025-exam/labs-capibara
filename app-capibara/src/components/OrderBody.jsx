@@ -10,6 +10,9 @@ import { useState } from 'react';
 
 import { Order } from "../resources/poke.mjs";
 import MakeOrder from './MakeOrder';
+import { Routes } from 'react-router';
+
+import "../App.css";
 
 function OrderBody(props) {
     const [order, setOrder] = useState([]);
@@ -157,10 +160,10 @@ function OrderBody(props) {
     });
 
     /// State for ingredient form select entries ///
-    const [ingredientsEntry, setIngredientsEntry] = useState([<SelectIngredient key={0} id={0} ingredients={ingredients} manageIngredient={manageIngredient} />]);
+    const [ingredientsEntry, setIngredientsEntry] = useState([<SelectIngredient key={0} id={0} ingredients={ingredients} manageIngredient={manageIngredient} bowlIngredients={bowlIngredients}/>]);
 
     const addIngredientField = () => {
-        setIngredientsEntry([...ingredientsEntry, <SelectIngredient key={ingredientsEntry.length} id={ingredientsEntry.length} ingredients={ingredients} manageIngredient={manageIngredient} />]);
+        setIngredientsEntry([...ingredientsEntry, <SelectIngredient key={ingredientsEntry.length} id={ingredientsEntry.length} ingredients={ingredients} manageIngredient={manageIngredient} bowlIngredients={bowlIngredients}/>]);
     };
 
     const removeIngredientField = () => {
@@ -174,10 +177,10 @@ function OrderBody(props) {
     }
 
     /// State for protein form select entries ///
-    const [proteinsEntry, setProteinsEntry] = useState([<SelectProtein key={0} id={0} proteins={proteins} manageProtein={manageProtein} />]);
+    const [proteinsEntry, setProteinsEntry] = useState([<SelectProtein key={0} id={0} proteins={proteins} manageProtein={manageProtein} bowlProteins={bowlProteins} />]);
 
     const addProteinField = () => {
-        setProteinsEntry([...proteinsEntry, <SelectProtein key={proteinsEntry.length} id={proteinsEntry.length} proteins={proteins} manageProtein={manageProtein} />]);
+        setProteinsEntry([...proteinsEntry, <SelectProtein key={proteinsEntry.length} id={proteinsEntry.length} proteins={proteins} manageProtein={manageProtein} bowlProteins={bowlProteins}/>]);
     };
 
     const removeProteinField = () => {
@@ -196,48 +199,50 @@ function OrderBody(props) {
     return <Tabs
         defaultActiveKey="Select_Ingredients"
         id="order page"
-        className="mb-3"
+        className="main-content"
         mountOnEnter
         unmountOnExit
         >
-        <Tab eventKey="Select_Ingredients" title="Select Ingredients">
-            
-            <MakeOrder 
-                order={order} 
-                addBowlToOrder={addBowl} 
 
-                bowlBase={bowlBase}
-                bowlSize={bowlSize}
-                
-                addBase={addBase}
-                addSize={addSize}
 
-                bowlIngredients={bowlIngredients}
-                bowlProteins={bowlProteins}
+            <Tab eventKey="Select_Ingredients" title="Select Ingredients">
+                <MakeOrder 
+                    order={order} 
+                    addBowlToOrder={addBowl} 
 
-                manageIngredient={manageIngredient}
-                manageProtein={manageProtein}
+                    bowlBase={bowlBase}
+                    bowlSize={bowlSize}
+                    
+                    addBase={addBase}
+                    addSize={addSize}
 
-                ingredientsEntry={ingredientsEntry}
-                addIngredientField={addIngredientField}
-                removeIngredientField={removeIngredientField}
+                    bowlIngredients={bowlIngredients}
+                    bowlProteins={bowlProteins}
 
-                proteinsEntry={proteinsEntry}
-                addProteinField={addProteinField}
-                removeProteinField={removeProteinField}
-            />
+                    manageIngredient={manageIngredient}
+                    manageProtein={manageProtein}
 
-        </Tab>
+                    ingredientsEntry={ingredientsEntry}
+                    addIngredientField={addIngredientField}
+                    removeIngredientField={removeIngredientField}
 
-        <Tab eventKey="Order Resume" title="Order Resume">
-            <div className="mt-5 pt-4">
-                <DisplayOrder 
-                    order={order}
-                    editBowlInOrder={editBowlInOrder}
-                    deleteBowlFromOrder={deleteBowlFromOrder}    
+                    proteinsEntry={proteinsEntry}
+                    addProteinField={addProteinField}
+                    removeProteinField={removeProteinField}
                 />
-            </div>
-        </Tab>
+
+            </Tab>
+
+            <Tab eventKey="Order Resume" title="Order Resume">
+                <div className="mt-5 pt-4">
+                    <DisplayOrder 
+                        order={order}
+                        editBowlInOrder={editBowlInOrder}
+                        deleteBowlFromOrder={deleteBowlFromOrder}   
+                        addBowlToOrder={addBowl} 
+                    />
+                </div>
+            </Tab>
 
 
     </Tabs>;
@@ -247,10 +252,11 @@ function OrderBody(props) {
 
 // to manage the MakeOrder page
 function SelectIngredient(props){
+    //console.log("w il debugging "+props.bowlIngredients+"id: "+props.id) value={props.bowlIngredients[props.id]}
     return(<InputGroup id={props.id} className=" mb-1" aria-label="select ingredient">
         
-        <Form.Select onChange={(e) => props.manageIngredient(props.id, e.target.value)}>
-            <option isInvalid>Select ingredient</option>
+        <Form.Select onChange={(e) => props.manageIngredient(props.id, e.target.value)} >
+            <option>Select ingredient</option>
 
             {props.ingredients}
 

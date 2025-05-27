@@ -28,6 +28,7 @@ function DisplayOrder(props) {
                                 bowls={order} 
                                 deleteBowlFromOrder={props.deleteBowlFromOrder}
                                 editBowlInOrder={props.editBowlInOrder}
+                                addBowlToOrder={props.addBowlToOrder}
                             />
                         </tbody>
                     </Table>
@@ -50,9 +51,9 @@ function DisplayBowls(props) {
                     <td>{item.quantity}</td>
                     <td>
                         <ButtonGroup>
-                            <Button variant='ok'> +1 </Button>
-                            <Button variant='warning' onClick={() => props.editBowlInOrder(idx)}> Edit </Button>
-                            <Button variant='danger' onClick={() => props.deleteBowlFromOrder(idx)}> -1 </Button>
+                            <Button variant='success' onClick={() => props.addBowlToOrder(item.bowl)}> + </Button>
+                            <Button variant='outline-secondary' onClick={() => props.editBowlInOrder(idx)}> Edit </Button>
+                            <Button variant='danger' onClick={() => props.deleteBowlFromOrder(idx)}> - </Button>
                         </ButtonGroup>
                     </td>
                 </tr>
